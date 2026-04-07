@@ -1,28 +1,28 @@
-  # Lab 4: Xây Dựng AI Agent Đầu Tiên Với LangGraph
-  **AI in Action — Vingrouph & VinUniversity**
+# Lab 4: Xây Dựng AI Agent Đầu Tiên Với LangGraph
+**AI in Action — Vingrouph & VinUniversity**
 
-  **Học viện: Đặng Văn Minh**
-  **MSHV: 2A202600027**
+**Học viện: Đặng Văn Minh**
+**MSHV: 2A202600027**
 
-  TravelBuddy là một AI Agent tư vấn du lịch thông minh, tự động tra cứu chuyến bay, khách sạn và tính toán ngân sách thông qua vòng lặp Agent–Tool của
-  LangGraph.
+TravelBuddy là một AI Agent tư vấn du lịch thông minh, tự động tra cứu chuyến bay, khách sạn và tính toán ngân sách thông qua vòng lặp Agent–Tool của
+LangGraph.
 
-  ---
+---
 
-  ## Kiến trúc
+## Kiến trúc
 
-  **Nodes:**
-  - `agent` — GPT-4o-mini với system prompt, quyết định gọi tool hay trả lời thẳng
-  - `tools` — LangGraph ToolNode thực thi 3 custom tools
+**Nodes:**
+- `agent` — GPT-4o-mini với system prompt, quyết định gọi tool hay trả lời thẳng
+- `tools` — LangGraph ToolNode thực thi 3 custom tools
 
-  **Edges:**
-  - `START → agent`
-  - `agent → tools` (nếu có tool_calls) hoặc `agent → END`
-  - `tools → agent` (luôn quay lại để tổng hợp)
+**Edges:**
+- `START → agent`
+- `agent → tools` (nếu có tool_calls) hoặc `agent → END`
+- `tools → agent` (luôn quay lại để tổng hợp)
 
-  ---
+---
 
-  ## Cấu Trúc Project
+## Cấu Trúc Project
 
 lab4_agent/
 ├── agent.py            # LangGraph graph: nodes, edges, chat loop
@@ -33,62 +33,62 @@ lab4_agent/
 ├── logs/               # Kết quả test tự động (markdown, có timestamp)
 └── .env                # API key (không commit)
 
-  ---
+---
 
-  ## Cài Đặt
+## Cài Đặt
 
-  **Yêu cầu:** Python 3.9+
+**Yêu cầu:** Python 3.9+
 
-  ```bash
-  # 1. Tạo và kích hoạt virtual environment
-  python -m venv venv
-  source venv/bin/activate       # Mac/Linux
-  # venv\Scripts\activate        # Windows
+```bash
+# 1. Tạo và kích hoạt virtual environment
+python -m venv venv
+source venv/bin/activate       # Mac/Linux
+# venv\Scripts\activate        # Windows
 
-  # 2. Cài đặt thư viện
-  pip install langchain langchain-openai langgraph python-dotenv
+# 2. Cài đặt thư viện
+pip install langchain langchain-openai langgraph python-dotenv
 
-  # 3. Tạo file .env
-  echo "OPENAI_API_KEY=sk-proj-..." > .env
+# 3. Tạo file .env
+echo "OPENAI_API_KEY=sk-proj-..." > .env
 
-  ---
-  Chạy Agent
+---
+Chạy Agent
 
-  python agent.py
+python agent.py
 
-  Agent sẽ khởi động chế độ chat tương tác:
+Agent sẽ khởi động chế độ chat tương tác:
 
-  ============================================================
-  TravelBuddy — Trợ lý Du lịch Thông minh
-     Gõ 'quit' để thoát
-  ============================================================
+============================================================
+TravelBuddy — Trợ lý Du lịch Thông minh
+    Gõ 'quit' để thoát
+============================================================
 
-  Bạn: Tôi ở Hà Nội, muốn đi Phú Quốc 2 đêm, budget 5 triệu
-  TravelBuddy đang suy nghĩ...
-  Gọi tool: search_flights({'origin': 'Hà Nội', 'destination': 'Phú Quốc'})
-  Gọi tool: search_hotels({'city': 'Phú Quốc'})
-  Gọi tool: calculate_budget({'total_budget': 5000000, ...})
-  Trả lời trực tiếp
+Bạn: Tôi ở Hà Nội, muốn đi Phú Quốc 2 đêm, budget 5 triệu
+TravelBuddy đang suy nghĩ...
+Gọi tool: search_flights({'origin': 'Hà Nội', 'destination': 'Phú Quốc'})
+Gọi tool: search_hotels({'city': 'Phú Quốc'})
+Gọi tool: calculate_budget({'total_budget': 5000000, ...})
+Trả lời trực tiếp
 
-  TravelBuddy: ...
+TravelBuddy: ...
 
-  Gõ quit, exit hoặc q để thoát.
+Gõ quit, exit hoặc q để thoát.
 
-  ---
-  Chạy Tests
+---
+Chạy Tests
 
-  python test.py
+python test.py
 
-  Kết quả in ra console và tự động lưu vào logs/YYYYMMDD_HHMMSS.md:
+Kết quả in ra console và tự động lưu vào logs/YYYYMMDD_HHMMSS.md:
 
-  =======================================================
-    TravelBuddy — Test Runner
-  =======================================================
-  [Test 1] Direct Answer — Không cần tool... PASS
-  [Test 2] Single Tool Call — Tìm chuyến bay... PASS
-  [Test 3] Multi-Step Tool Chaining — Kế hoạch trọn gói... PASS
-  ...
-  =======================================================
-    Result: 9/10 passed
-    Log saved → logs/20260407_153621.md
-  =======================================================
+=======================================================
+  TravelBuddy — Test Runner
+=======================================================
+[Test 1] Direct Answer — Không cần tool... PASS
+[Test 2] Single Tool Call — Tìm chuyến bay... PASS
+[Test 3] Multi-Step Tool Chaining — Kế hoạch trọn gói... PASS
+...
+=======================================================
+  Result: 9/10 passed
+  Log saved → logs/20260407_153621.md
+=======================================================
