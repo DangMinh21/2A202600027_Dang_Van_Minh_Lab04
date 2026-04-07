@@ -45,6 +45,41 @@ TEST_CASES = [
         "expect": "Từ chối lịch sự, nói chỉ hỗ trợ về du lịch.",
         "expect_tool_calls": 0,
     },
+    {
+        "id": 6,
+        "name": "Reverse Flight — Chiều bay ngược",
+        "input": "Tìm chuyến bay từ Đà Nẵng về Hà Nội",
+        "expect": "Gọi search_flights 1 lần, trả về kết quả chiều ngược kèm cảnh báo rõ ràng.",
+        "expect_tool_calls": 1,
+    },
+    {
+        "id": 7,
+        "name": "Non-existent Route — Tuyến bay không tồn tại",
+        "input": "Có chuyến bay từ Hà Nội đi Hội An không?",
+        "expect": "Gọi search_flights 1 lần, trả về thông báo không tìm thấy tuyến bay.",
+        "expect_tool_calls": 1,
+    },
+    {
+        "id": 8,
+        "name": "Hotel No Result — Không có khách sạn trong tầm giá",
+        "input": "Tìm khách sạn ở Phú Quốc dưới 100.000đ một đêm",
+        "expect": "Gọi search_hotels 1 lần với max_price=100000, trả về gợi ý tăng ngân sách.",
+        "expect_tool_calls": 1,
+    },
+    {
+        "id": 9,
+        "name": "Budget Exceeded — Vượt ngân sách",
+        "input": "Tôi có 2 triệu, muốn đi Hà Nội đến Phú Quốc 2 đêm. Tư vấn giúp!",
+        "expect": "Agent chuỗi 3 tools, calculate_budget cảnh báo vượt ngân sách rõ ràng.",
+        "expect_tool_calls": 3,
+    },
+    {
+        "id": 10,
+        "name": "Multi-destination — So sánh 2 điểm đến",
+        "input": "So sánh giá vé từ Hà Nội đi Đà Nẵng và Hà Nội đi Phú Quốc",
+        "expect": "Gọi search_flights 2 lần cho cả hai tuyến, liệt kê và so sánh.",
+        "expect_tool_calls": 2,
+    },
 ]
 
 
@@ -81,7 +116,9 @@ def check_pass(tc: dict, result: dict) -> bool:
 
 def format_section(tc: dict, result: dict) -> str:
     status = "✅ PASS" if check_pass(tc, result) else "❌ FAIL"
-    error_block = f"\n**Error:**\n```\n{result['error']}\n```\n" if result["error"] else ""
+    error_block = (
+        f"\n**Error:**\n```\n{result['error']}\n```\n" if result["error"] else ""
+    )
 
     return f"""## Test {tc['id']}: {tc['name']} — {status}
 

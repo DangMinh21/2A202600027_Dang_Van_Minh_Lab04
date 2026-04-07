@@ -1,5 +1,3 @@
-from langchain_core import tools
-
 from langchain_core.tools import tool
 
 # ============================================================
@@ -226,7 +224,6 @@ HOTELS_DB = {
     ],
 }
 
-
 @tool
 def search_flights(origin: str, destination: str) -> str:
     """
@@ -299,9 +296,9 @@ def search_hotels(city: str, max_price_per_night: int = 99999999) -> str:
     # Lý do: giúp agent đưa ra lời khuyên hữu ích thay vì chỉ báo "không có".
     if not affordable:
         price_fmt = f"{max_price_per_night:,}".replace(",", ".")
-        
+
         if max_price_per_night == 99999999:
-            return (f"Không tìm thấy khách sạn tại {city}")
+            return f"Không tìm thấy khách sạn tại {city}"
         return (
             f"Không tìm thấy khách sạn tại {city} với giá dưới {price_fmt}đ/đêm. "
             f"Hãy thử tăng ngân sách."
@@ -408,7 +405,7 @@ def calculate_budget(total_budget: int, expenses: str) -> str:
 
 
 if __name__ == "__main__":
-    
+
     print(f"========== Test Search Flight tool ============")
     # Test chiều thuận
     print(search_flights.invoke({"origin": "Hà Nội", "destination": "Đà Nẵng"}))
